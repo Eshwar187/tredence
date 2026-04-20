@@ -24,6 +24,8 @@ src/
     nodes/
       *.tsx                        # Visual node renderers
       index.ts                     # Node registry + node factory defaults
+    pages/
+      WorkspacePages.tsx           # Routed module pages (dashboard, automations, history)
     ui/
       Layout.tsx                   # Topbar + shell layout
       NodePalette.tsx              # Draggable node palette
@@ -32,6 +34,8 @@ src/
     useAutomations.ts              # Fetch automation actions once and cache in state
   store/
     workflowStore.ts               # Zustand graph state + actions + validation
+  templates/
+    workflowTemplates.ts           # Built-in workflow templates
   types/
     workflow.ts                    # Shared domain types/contracts
 ```
@@ -111,6 +115,16 @@ Sample automations include:
 - All nodes should be reachable from Start
 - Edges must reference existing nodes
 
+### 6) Optional Features Implemented
+
+- Export workflow as JSON
+- Import workflow from JSON
+- One-click node template loading (Onboarding / Leave Approval)
+- Undo / Redo stack
+- Auto-layout for workflow graph
+- Node-level validation indicators directly on canvas nodes
+- Node version history (latest revisions shown in form panel)
+
 ## How To Run
 
 ```bash
@@ -133,8 +147,8 @@ npm run preview
 
 ## What I Would Add With More Time
 
-- Import/export workflow JSON
-- Undo/redo stack
-- Auto-layout (dagre/elk)
-- Node-level inline validation badges
-- More advanced branching conditions and runtime context
+- Branching condition editor with rule builder UI
+- Persisted workflow library with backend storage
+- Approval SLA and escalation simulations
+- Multi-user audit trail and comments
+- Visual diff for workflow versions across revisions

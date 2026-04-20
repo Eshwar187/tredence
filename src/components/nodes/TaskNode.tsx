@@ -8,8 +8,10 @@ interface TaskNodeProps {
 }
 
 const TaskNode = memo(({ data, selected }: TaskNodeProps) => {
+  const hasValidationError = Boolean((data as Record<string, unknown>).hasValidationError);
+
   return (
-    <div className={`workflow-node workflow-node--task ${selected ? 'is-selected' : ''}`}>
+    <div className={`workflow-node workflow-node--task ${selected ? 'is-selected' : ''} ${hasValidationError ? 'has-validation-error' : ''}`}>
       <Handle type="target" position={Position.Left} className="workflow-node-handle workflow-node-handle--task" />
       <div className="workflow-node-main workflow-node-main--stacked">
         <div className="workflow-node-icon">
@@ -32,6 +34,7 @@ const TaskNode = memo(({ data, selected }: TaskNodeProps) => {
           {data.dueDate}
         </div>
       )}
+      {hasValidationError && <div className="node-error-pill">!</div>}
       <Handle type="source" position={Position.Right} className="workflow-node-handle workflow-node-handle--task" />
     </div>
   );

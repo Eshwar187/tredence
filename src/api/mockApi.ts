@@ -8,7 +8,7 @@ import type {
 } from '../types/workflow';
 
 const mockActions: AutomationAction[] = [
-  { id: 'send_email', label: 'Send Email', params: ['to', 'subject', 'body'] },
+  { id: 'send_email', label: 'Send Email', params: ['to', 'subject'] },
   { id: 'generate_doc', label: 'Generate Document', params: ['template', 'recipient'] },
   { id: 'send_slack', label: 'Send Slack Message', params: ['channel', 'message'] },
   { id: 'create_calendar', label: 'Create Calendar Event', params: ['title', 'date', 'duration'] },

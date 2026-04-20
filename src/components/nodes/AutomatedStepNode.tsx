@@ -8,8 +8,10 @@ interface AutomatedStepNodeProps {
 }
 
 const AutomatedStepNode = memo(({ data, selected }: AutomatedStepNodeProps) => {
+  const hasValidationError = Boolean((data as Record<string, unknown>).hasValidationError);
+
   return (
-    <div className={`workflow-node workflow-node--automated ${selected ? 'is-selected' : ''}`}>
+    <div className={`workflow-node workflow-node--automated ${selected ? 'is-selected' : ''} ${hasValidationError ? 'has-validation-error' : ''}`}>
       <Handle type="target" position={Position.Left} className="workflow-node-handle workflow-node-handle--automated" />
       <div className="workflow-node-main workflow-node-main--stacked">
         <div className="workflow-node-icon">
@@ -31,6 +33,7 @@ const AutomatedStepNode = memo(({ data, selected }: AutomatedStepNodeProps) => {
           {Object.keys(data.actionParams).length} param(s) configured
         </div>
       )}
+      {hasValidationError && <div className="node-error-pill">!</div>}
       <Handle type="source" position={Position.Right} className="workflow-node-handle workflow-node-handle--automated" />
     </div>
   );

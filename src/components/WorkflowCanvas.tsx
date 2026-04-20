@@ -1,4 +1,4 @@
-import { useCallback, useRef, DragEvent } from 'react';
+import { useCallback, useMemo, useRef, DragEvent } from 'react';
 import {
   ReactFlow,
   Background,
@@ -31,8 +31,28 @@ function WorkflowCanvas() {
     onEdgesChange,
     onConnect,
     addNode,
+    loadTemplate,
     setSelectedNode,
+    getNodeValidationIssues,
   } = useWorkflowStore();
+
+  const nodeIssues = getNodeValidationIssues();
+
+  const decoratedNodes = useMemo(
+    () =>
+      nodes.map((node) => {
+        const validationErrors = nodeIssues[node.id] || [];
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            validationErrors,
+            hasValidationError: validationErrors.length > 0,
+          },
+        };
+      }),
+    [nodeIssues, nodes]
+  );
 
   const onDragOver = useCallback((event: DragEvent) => {
     event.preventDefault();
@@ -86,12 +106,35 @@ function WorkflowCanvas() {
     [setSelectedNode]
   );
 
+  const handleLoadDemoWorkflow = useCallback(() => {
+    const shouldReplace =
+      nodes.length === 0 ||
+      window.confirm('Load demo workflow? Current canvas content will be replaced.');
+
+    if (!shouldReplace) {
+      return;
+    }
+
+    loadTemplate('onboarding');
+  }, [loadTemplate, nodes.length]);
+
   return (
     <div className="workflow-designer">
       <NodePalette onAddNode={handleQuickAddNode} />
       <div className="canvas-stage" ref={reactFlowWrapper}>
+        <div className="canvas-quick-actions">
+          <button
+            type="button"
+            className="btn btn-primary canvas-demo-button"
+            onClick={handleLoadDemoWorkflow}
+          >
+            <span className="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+            {nodes.length > 0 ? 'Reload Demo Workflow' : 'Load Demo Workflow'}
+          </button>
+        </div>
+
         <ReactFlow
-          nodes={nodes}
+          nodes={decoratedNodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}

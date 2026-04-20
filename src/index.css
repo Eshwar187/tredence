@@ -85,6 +85,7 @@ body {
   border-bottom: 1px solid var(--line-subtle);
   background: rgba(255, 255, 255, 0.84);
   backdrop-filter: blur(8px);
+  animation: slide-down 380ms ease-out;
 }
 
 .topbar-brand {
@@ -103,6 +104,35 @@ body {
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-card);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.topbar-logo-small:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(6, 67, 120, 0.18);
+}
+
+.brand-mark {
+  width: 22px;
+  height: 22px;
+  animation: logo-bob 3.8s ease-in-out infinite;
+}
+
+.brand-mark path {
+  fill: rgba(255, 255, 255, 0.96);
+}
+
+.brand-mark .link {
+  fill: rgba(255, 255, 255, 0.86);
+}
+
+.brand-mark .connector {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 8;
+  animation: connector-flow 6s linear infinite;
 }
 
 .topbar-title {
@@ -135,10 +165,12 @@ body {
   font-weight: 700;
   transition: 0.2s ease;
   background: transparent;
+  transform: translateY(0);
 }
 
 .topbar-link:hover {
   background: var(--bg-soft);
+  transform: translateY(-1px);
 }
 
 .topbar-link.active {
@@ -150,6 +182,12 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hidden-file-input {
+  display: none;
 }
 
 .nodes-count {
@@ -200,6 +238,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  animation: fade-in-left 420ms ease-out;
 }
 
 .sidebar-header {
@@ -219,6 +258,11 @@ body {
   justify-content: center;
   color: white;
   background: linear-gradient(140deg, var(--brand-primary), #0894d9);
+}
+
+.sidebar-logo .brand-mark {
+  width: 20px;
+  height: 20px;
 }
 
 .sidebar-title {
@@ -258,11 +302,32 @@ body {
   cursor: pointer;
   text-align: left;
   background: transparent;
+  position: relative;
+  overflow: hidden;
 }
 
 .nav-link:hover {
   background: #e3edf9;
   transform: translateX(3px);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #61a5e5, #1f88d7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
 }
 
 .nav-link.active {
@@ -280,13 +345,14 @@ body {
   flex: 1;
   min-width: 0;
   display: grid;
-  grid-template-columns: 220px 1fr 320px 360px;
+  grid-template-columns: 200px 1fr 280px 320px;
   gap: 0;
   border: 1px solid var(--line-subtle);
   border-radius: 18px;
   overflow: hidden;
   background: var(--bg-panel);
   box-shadow: var(--shadow-soft);
+  animation: rise-in 420ms ease-out;
 }
 
 .section-page {
@@ -297,6 +363,7 @@ body {
   box-shadow: var(--shadow-soft);
   padding: 22px;
   overflow: auto;
+  animation: rise-in 420ms ease-out;
 }
 
 .section-page-header {
@@ -335,7 +402,19 @@ body {
   background: white;
   padding: 14px;
   box-shadow: var(--shadow-card);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  animation: fade-up 360ms ease both;
 }
+
+.section-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(23, 58, 96, 0.12);
+}
+
+.section-grid .section-card:nth-child(1) { animation-delay: 50ms; }
+.section-grid .section-card:nth-child(2) { animation-delay: 100ms; }
+.section-grid .section-card:nth-child(3) { animation-delay: 150ms; }
+.section-grid .section-card:nth-child(4) { animation-delay: 200ms; }
 
 .section-card h3 {
   margin: 0;
@@ -362,7 +441,19 @@ body {
   background: white;
   padding: 12px;
   box-shadow: var(--shadow-card);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+  animation: fade-up 360ms ease both;
 }
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(23, 58, 96, 0.1);
+}
+
+.metrics-grid .metric-card:nth-child(1) { animation-delay: 40ms; }
+.metrics-grid .metric-card:nth-child(2) { animation-delay: 80ms; }
+.metrics-grid .metric-card:nth-child(3) { animation-delay: 120ms; }
+.metrics-grid .metric-card:nth-child(4) { animation-delay: 160ms; }
 
 .metric-card-header {
   display: flex;
@@ -462,6 +553,8 @@ body {
   cursor: grab;
   user-select: none;
   transition: 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .palette-item:hover,
@@ -469,6 +562,19 @@ body {
   transform: translateY(-2px);
   box-shadow: var(--shadow-card);
   outline: none;
+}
+
+.palette-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.35) 48%, transparent 76%);
+  transform: translateX(-130%);
+}
+
+.palette-item:hover::before,
+.palette-item:focus-visible::before {
+  animation: sheen 520ms ease;
 }
 
 .palette-item-content {
@@ -526,6 +632,26 @@ body {
     linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(239, 246, 255, 0.72));
 }
 
+.canvas-quick-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.canvas-demo-button {
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(4px);
+}
+
+.canvas-demo-button .material-symbols-outlined {
+  font-size: 17px;
+}
+
 .config-panel,
 .simulation-panel {
   background: #fbfdff;
@@ -533,11 +659,13 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  animation: fade-up 360ms ease-out;
 }
 
 .panel-header {
   padding: 14px;
   border-bottom: 1px solid var(--line-subtle);
+  animation: fade-up 360ms ease-out;
 }
 
 .panel-kicker {
@@ -571,6 +699,12 @@ body {
 .panel-footer {
   border-top: 1px solid var(--line-subtle);
   padding: 12px 14px;
+}
+
+.node-history-block {
+  border-top: 1px solid var(--line-subtle);
+  padding: 10px 14px;
+  background: #f7fbff;
 }
 
 .empty-panel-state {
@@ -724,6 +858,7 @@ body {
   justify-content: center;
   gap: 6px;
   transition: 0.2s ease;
+  transform: translateY(0);
 }
 
 .btn:disabled {
@@ -739,6 +874,7 @@ body {
 
 .btn-secondary:hover:not(:disabled) {
   background: #dce8f6;
+  transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -748,6 +884,7 @@ body {
 
 .btn-primary:hover:not(:disabled) {
   filter: brightness(1.05);
+  transform: translateY(-1px);
 }
 
 .btn-danger {
@@ -758,6 +895,7 @@ body {
 
 .btn-danger:hover:not(:disabled) {
   background: #ffe3e0;
+  transform: translateY(-1px);
 }
 
 .panel-delete-btn {
@@ -780,6 +918,7 @@ body {
 
 .icon-btn:hover {
   background: #edf4fc;
+  transform: translateY(-1px);
 }
 
 .icon-btn.accent {
@@ -885,7 +1024,20 @@ body {
 .timeline-row {
   display: flex;
   gap: 10px;
+  animation: fade-up 340ms ease both;
 }
+
+.timeline-list .timeline-row:nth-child(1) { animation-delay: 40ms; }
+.timeline-list .timeline-row:nth-child(2) { animation-delay: 90ms; }
+.timeline-list .timeline-row:nth-child(3) { animation-delay: 140ms; }
+.timeline-list .timeline-row:nth-child(4) { animation-delay: 190ms; }
+.timeline-list .timeline-row:nth-child(5) { animation-delay: 240ms; }
+.timeline-list .timeline-row:nth-child(6) { animation-delay: 290ms; }
+.timeline-list .timeline-row:nth-child(7) { animation-delay: 340ms; }
+.timeline-list .timeline-row:nth-child(8) { animation-delay: 390ms; }
+.timeline-list .timeline-row:nth-child(9) { animation-delay: 440ms; }
+.timeline-list .timeline-row:nth-child(10) { animation-delay: 490ms; }
+.timeline-list .timeline-row:nth-child(n + 11) { animation-delay: 540ms; }
 
 .timeline-marker-column {
   display: flex;
@@ -969,12 +1121,40 @@ body {
 
 .workflow-node {
   min-width: 202px;
+  position: relative;
   border-radius: 13px;
   border: 1.5px solid;
   background: white;
   box-shadow: var(--shadow-card);
   padding: 10px 12px;
-  transition: 0.18s ease;
+  transition: transform 190ms ease, box-shadow 190ms ease;
+}
+
+.workflow-node:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(23, 58, 96, 0.13);
+}
+
+.workflow-node.has-validation-error {
+  border-color: #d25e52;
+  box-shadow: 0 0 0 2px rgba(210, 94, 82, 0.24), var(--shadow-card);
+}
+
+.node-error-pill {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: white;
+  background: #d25e52;
+  border: 2px solid white;
 }
 
 .workflow-node.is-selected {
@@ -1128,9 +1308,81 @@ body {
   }
 }
 
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes logo-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes connector-flow {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -16;
+  }
+}
+
+@keyframes sheen {
+  from {
+    transform: translateX(-130%);
+  }
+  to {
+    transform: translateX(140%);
+  }
+}
+
 @media (max-width: 1320px) {
   .workflow-designer {
-    grid-template-columns: 200px 1fr 300px;
+    grid-template-columns: 190px 1fr 280px;
   }
 
   .simulation-panel {
@@ -1141,6 +1393,17 @@ body {
   .rf-minimap {
     width: 132px !important;
     height: 84px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -1162,7 +1425,7 @@ body {
   }
 
   .workflow-designer {
-    grid-template-columns: 190px 1fr 300px;
+    grid-template-columns: 180px 1fr 280px;
   }
 
   .topbar-nav {
@@ -1173,6 +1436,17 @@ body {
 @media (max-width: 900px) {
   .workspace-main {
     padding: 0;
+  }
+
+  .canvas-quick-actions {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .canvas-demo-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .workflow-designer {

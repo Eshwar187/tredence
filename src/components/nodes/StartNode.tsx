@@ -8,8 +8,10 @@ interface StartNodeProps {
 }
 
 const StartNode = memo(({ data, selected }: StartNodeProps) => {
+  const hasValidationError = Boolean((data as Record<string, unknown>).hasValidationError);
+
   return (
-    <div className={`workflow-node workflow-node--start ${selected ? 'is-selected' : ''}`}>
+    <div className={`workflow-node workflow-node--start ${selected ? 'is-selected' : ''} ${hasValidationError ? 'has-validation-error' : ''}`}>
       <Handle type="target" position={Position.Left} className="workflow-node-handle workflow-node-handle--start" />
       <div className="workflow-node-main">
         <div className="workflow-node-icon">
@@ -20,6 +22,7 @@ const StartNode = memo(({ data, selected }: StartNodeProps) => {
           <div className="workflow-node-title">{data.label || 'Start'}</div>
         </div>
       </div>
+      {hasValidationError && <div className="node-error-pill">!</div>}
       <Handle type="source" position={Position.Right} className="workflow-node-handle workflow-node-handle--start" />
     </div>
   );

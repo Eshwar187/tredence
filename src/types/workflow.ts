@@ -63,6 +63,19 @@ export interface WorkflowSimulationRequest {
   edges: WorkflowEdgeSnapshot[];
 }
 
+export interface WorkflowJson {
+  version: 1;
+  exportedAt: string;
+  nodes: Array<WorkflowNodeSnapshot & { position: { x: number; y: number } }>;
+  edges: Array<WorkflowEdgeSnapshot & { id: string }>;
+}
+
+export interface NodeVersionEntry {
+  revision: number;
+  changedAt: string;
+  data: WorkflowNodeData;
+}
+
 export interface SimulationStep {
   step: number;
   nodeId: string;

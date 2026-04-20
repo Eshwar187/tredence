@@ -17,7 +17,7 @@ type NodeFormProps<T extends WorkflowNodeData> = {
 };
 
 export function NodeConfigPanel() {
-  const { selectedNode, updateNodeData, setSelectedNode, deleteSelected } = useWorkflowStore();
+  const { selectedNode, updateNodeData, setSelectedNode, deleteSelected, nodeHistory } = useWorkflowStore();
   const { actions, isLoading } = useAutomations();
 
   if (!selectedNode) {
@@ -35,6 +35,7 @@ export function NodeConfigPanel() {
   const handleClose = () => setSelectedNode(null);
 
   const selectedNodeData = selectedNode.data as WorkflowNodeData;
+  const selectedNodeHistory = nodeHistory[selectedNode.id] || [];
 
   const updateSelectedNode = (data: Partial<WorkflowNodeData>) => {
     updateNodeData(selectedNode.id, data);
@@ -97,6 +98,19 @@ export function NodeConfigPanel() {
       </header>
 
       <div className="panel-content">{renderForm()}</div>
+
+      {selectedNodeHistory.length > 0 && (
+        <div className="node-history-block">
+          <p className="field-label">Node Version History</p>
+          <ul className="plain-list">
+            {selectedNodeHistory.slice(-5).reverse().map((entry) => (
+              <li key={`${selectedNode.id}-${entry.revision}`}>
+                Rev {entry.revision} - {new Date(entry.changedAt).toLocaleTimeString()}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="panel-footer">
         <button onClick={deleteSelected} className="btn btn-danger panel-delete-btn">
